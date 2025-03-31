@@ -1,0 +1,9 @@
+Flask
+Flask-CORS
+torch
+torchvision
+timm
+pillow
+requests
+python-dotenv
+google-generativeai
