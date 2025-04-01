@@ -110,7 +110,6 @@ def get_disease_info():
     return jsonify({"info":disease_info})
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 10000))  # Use Render's default port (10000)
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(debug=False)
 
 
