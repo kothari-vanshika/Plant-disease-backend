@@ -23,7 +23,8 @@ def load_model():
         model.eval()
         model.to(torch.device('cpu'))  # Ensure it's on CPU
     return model
-
+#model=load_model()
+#print("model loaded")
 def load_class_indices(file_path="class_indices.json"):
     if not os.path.exists(file_path):
         print(f"Error: The file {file_path} does not exist!")
@@ -108,6 +109,10 @@ def get_disease_info():
     print(disease_info)
     return jsonify({"info":disease_info})
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 10000))  # Use Render's default port (10000)
+    app.run(host='0.0.0.0', port=port, debug=True)
+# if __name__ == '__main__':
+# #     port = int(os.environ.get('PORT', 10000))  # Use Render's default port (10000)
+#      app.run(debug=True)
 
