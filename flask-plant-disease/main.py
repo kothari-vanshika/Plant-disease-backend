@@ -10,17 +10,21 @@ import torch
 import timm
 app = Flask(__name__)
 CORS(app)
-model=timm.create_model('convmixer_1024_20_ks9_p14.in1k', pretrained=True, num_classes=38)
-# MODEL_PATH = r"C:\Users\Vanshika Kothari\trained_models\plant_disease_model.pth"
+model = None  
 MODEL_PATH = "plant_disease_model.pth"
-state_dict = torch.load(MODEL_PATH, map_location=torch.device('cpu'))
-model.load_state_dict(state_dict)
+def load_model():
+    """Load model only once (prevents high memory usage)."""
+    global model
+    if model is None:  # Load model only if it's not already loaded
+        print("🔹 Loading Model...")
+        model = timm.create_model('convmixer_1024_20_ks9_p14.in1k', pretrained=True, num_classes=38)
+        state_dict = torch.load(MODEL_PATH, map_location=torch.device('cpu'))
+        model.load_state_dict(state_dict)
+        model.eval()
+        model.to(torch.device('cpu'))  # Ensure it's on CPU
+    return model
 
-# Step 3: Set model to evaluation mode
-model.eval()
-model.to(torch.device('cpu'))  # Ensure it's on CPU
-
-def load_class_indices(file_path=r'C:\Users\Vanshika Kothari\trained_models\class_indices.json'):
+def load_class_indices(file_path="class_indices.json"):
     if not os.path.exists(file_path):
         print(f"Error: The file {file_path} does not exist!")
         return None
@@ -60,6 +64,7 @@ def predict():
     image = Image.open(io.BytesIO(file.read()))
     processed_image = preprocess_image(image)
     processed_img = processed_image.to('cpu')
+    model=load_model()
     with torch.no_grad():
         outputs = model(processed_img)
     predicted_class_index = outputs.argmax(dim=1).item()
