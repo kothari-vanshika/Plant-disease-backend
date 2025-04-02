@@ -9,7 +9,7 @@ import os
 import torch
 import timm
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 model = None  
 MODEL_PATH = "plant_disease_model.pth"
 @app.route("/")
