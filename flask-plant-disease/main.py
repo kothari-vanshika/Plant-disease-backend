@@ -14,7 +14,7 @@ model = None
 MODEL_PATH = "plant_disease_model.pth"
 @app.route("/")
 def home():
-    print("server ready!")
+   return "server ready!"
 def load_model():
     """Load model only once (prevents high memory usage)."""
     global model
