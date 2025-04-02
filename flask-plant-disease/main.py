@@ -12,6 +12,9 @@ app = Flask(__name__)
 CORS(app)
 model = None  
 MODEL_PATH = "plant_disease_model.pth"
+@app.route("/")
+def home():
+    print("server ready!")
 def load_model():
     """Load model only once (prevents high memory usage)."""
     global model
@@ -110,6 +113,6 @@ def get_disease_info():
     return jsonify({"info":disease_info})
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(host='0.0.0.0',debug=False)
 
 
